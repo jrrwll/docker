@@ -2,7 +2,7 @@ FROM debian
 
 LABEL maintainer="tukeof@gmail.com" \
       version="1.0" \
-      description="mupdf image"
+      description="pdf image"
 
 ENV MUPDF_VERSION=1.14.0
 
@@ -12,7 +12,7 @@ ENV MUPDF_VERSION=1.14.0
 # X11/extensions/XInput.h   libxi-dev
 # X11/extensions/Xrandr.h   libxrandr-dev
 RUN apt-get update -y && \
-    apt-get install -y apt-utils ghostscript poppler-utils wget make g++ && \
+    apt-get install -y apt-utils qpdf ghostscript poppler-utils wget make g++ && \
     apt-get install -y mesa-common-dev libglu1-mesa-dev libxi-dev libxrandr-dev && \
     wget https://mupdf.com/downloads/archive/mupdf-${MUPDF_VERSION}-source.tar.gz && \
     tar xfz mupdf-${MUPDF_VERSION}-source.tar.gz && \
