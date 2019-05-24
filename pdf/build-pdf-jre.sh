@@ -10,7 +10,7 @@ if [ "$1" = "centos" ]; then
     exit 0
 fi
 
-docker build -t tukeof/pdf-jre .
+docker build -t tukeof/pdf-jre -f pdf-jre.Dockerfile .
 
 docker tag tukeof/pdf-jre tukeof/pdf-jre:1.14.0
 
