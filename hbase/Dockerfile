@@ -1,8 +1,6 @@
 FROM tukeof/oraclejre
 
-LABEL maintainer="tukeof@gmail.com" \
-      version="1.0" \
-      description="hbase image"
+MAINTAINER "tuke tukeof@gmail.com"
 
 ENV HBASE_VERSION=2.1.3
 ENV HBASE_HOME=/usr/local/hbase-${HBASE_VERSION}

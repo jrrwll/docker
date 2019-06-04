@@ -1,4 +1,4 @@
-FROM tukeof/fatopenjdk:centos
+FROM foekut/fatopenjdk
 
 MAINTAINER "tuke tukeof@gmail.com"
 

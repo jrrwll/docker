@@ -3,7 +3,7 @@
 cd `dirname $0`
 
 if [ "$1" = "centos" ]; then
-    docker build -t tukeof/cmake-centos -f cmake-centos.Dockerfile .
+    docker build -t foekut/cmake -f centos.Dockerfile .
 
     exit 0
 fi

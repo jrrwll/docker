@@ -3,7 +3,7 @@
 cd `dirname $0`
 
 if [ "$1" = "centos" ]; then
-    docker build -t tukeof/ssdb-centos -f ssdb-centos.Dockerfile .
+    docker build -t foekut/ssdb-centos -f centos.Dockerfile .
     exit 0
 fi
 

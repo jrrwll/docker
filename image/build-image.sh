@@ -3,7 +3,7 @@
 cd `dirname $0`
 
 if [ "$1" = "centos" ]; then
-    docker build -t tukeof/image-centos -f image-centos.Dockerfile .
+    docker build -t foekut/image -f centos.Dockerfile .
     exit 0
 fi
 

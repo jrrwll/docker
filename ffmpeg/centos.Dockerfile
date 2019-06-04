@@ -1,8 +1,6 @@
 FROM centos
 
-LABEL maintainer="tukeof@gmail.com" \
-      version="1.0" \
-      description="ffmpeg image based on centos"
+MAINTAINER "tuke tukeof@gmail.com"
 
 RUN yum install -y epel-release && \
     rpm -v --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro && \

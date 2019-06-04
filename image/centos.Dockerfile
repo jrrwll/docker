@@ -1,6 +1,6 @@
-FROM tukeof/oraclejre-centos
+FROM centos
 
-MAINTAINER "tukeof@gmail.com"
+MAINTAINER "tuke tukeof@gmail.com"
 
 RUN yum install epel-release -y && \
     yum install -y GraphicsMagick ImageMagick

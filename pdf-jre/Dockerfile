@@ -1,4 +1,4 @@
-FROM debian
+FROM tukeof/oraclejre
 
 MAINTAINER "tuke tukeof@gmail.com"
 

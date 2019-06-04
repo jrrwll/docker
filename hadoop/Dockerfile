@@ -1,8 +1,6 @@
 FROM tukeof/oraclejre
 
-LABEL maintainer="tukeof@gmail.com" \
-      version="1.0" \
-      description="hadoop image"
+MAINTAINER "tuke tukeof@gmail.com"
 
 RUN apt-get update -y && apt-get install -y ssh && \
     mkdir /run/sshd && \

@@ -3,6 +3,6 @@
 cd `dirname $0`
 
 if [ "$1" = "centos" ]; then
-    docker build -t tukeof/swftools-centos -f swftools-centos.Dockerfile .
+    docker build -t foekut/swftools -f centos.Dockerfile .
     exit 0
 fi

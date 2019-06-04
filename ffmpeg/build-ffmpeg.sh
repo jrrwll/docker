@@ -3,7 +3,7 @@
 cd `dirname $0`
 
 if [ "$1" = "centos" ]; then
-    docker build -t tukeof/ffmpeg-centos -f ffmpeg-centos.Dockerfile .
+    docker build -t foekut/ffmpeg -f centos.Dockerfile .
 
     exit 0
 fi
