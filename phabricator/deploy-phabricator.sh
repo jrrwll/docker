@@ -27,4 +27,16 @@ docker run -d -it --name phabricator --hostname phabricator \
     -e MYSQL_HOST=phabricator_mysql \
     -e MYSQL_PASS=root\
     -e PHABRICATOR_DOMAIN=example.com \
-    tukeof/phabricator
+    foekut/phabricator
+
+# ==== ==== ==== ====    ==== ==== ==== ====    ==== ==== ==== ====
+
+## native mysql mode
+#wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+#rpm -ivh mysql-community-release-el7-5.noarch.rpm
+#yum install -y mysql-server
+#
+#mysql_install_db
+#systemctl start  mysqld
+#/usr/bin/mysqladmin -u root password 'root'
+#systemctl enable  mysqld

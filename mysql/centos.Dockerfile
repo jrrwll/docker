@@ -1,4 +1,4 @@
-FROM centos
+FROM foekut/centos
 
 MAINTAINER "tuke tukeof@gmail.com"
 

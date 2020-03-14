@@ -1,11 +1,17 @@
-FROM debian
+FROM tukeof/debian
 
 MAINTAINER "tuke tukeof@gmail.com"
 
-ENV JDK_VERSION=1.8.0_211
-ENV JAVA_HOME=/usr/local/jdk${JDK_VERSION}
+RUN apt-get update -y && apt-get install -y libfreetype6 fontconfig && \
+    fc-cache --force && \
+    apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y && apt-get purge -y && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ADD jdk-8u211-linux-x64.tar.gz /usr/local
+ENV JDK_VERSION=13.0.2
+
+ENV JAVA_HOME=/usr/local/jdk-${JDK_VERSION}
+
+ADD jdk-${JDK_VERSION}_linux-x64_bin.tar.gz /usr/local
 
 RUN ln -s ${JAVA_HOME}/bin/* /usr/local/bin/
 

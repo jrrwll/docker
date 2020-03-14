@@ -1,8 +1,8 @@
-FROM tukeof/fatopenjdk
+FROM tukeof/oraclejre
 
 MAINTAINER "tuke tukeof@gmail.com"
 
-ENV NEXUS_VERSION=3.16.1-02
+ENV NEXUS_VERSION=3.21.1-01
 
 #RUN mkdir -p /usr/local && cd /usr/local && \
 #    wget https://sonatype-download.global.ssl.fastly.net/repository/repositoryManager/3/nexus-${NEXUS_VERSION}-unix.tar.gz && \
