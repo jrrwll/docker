@@ -4,8 +4,7 @@ REGISTRY=tukeof
 
 cd `dirname $0`
 WORK_DIR=`pwd`
-BIN=./build-docker.sh
-[[ ! -x $BIN ]] && chmod +x $BIN
+BIN=`which build-docker`
 
 echo '
 # cdn fastly in China
@@ -16,7 +15,8 @@ nginx
 #oraclejre 8 1.8 1.8.0_241
 #oraclejdk 8 1.8 1.8.0_241
 #oraclejre 13 13.0.2
-oraclejdk 13 13.0.2
+#oraclejdk 13 13.0.2
+oraclejdk 14
 cmake
 
 ffmpeg

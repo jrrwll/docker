@@ -7,7 +7,7 @@ RUN apt-get update -y && apt-get install -y libfreetype6 fontconfig && \
     apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y && apt-get purge -y && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENV JDK_VERSION=14
+ENV JDK_VERSION=13.0.2
 
 ENV JAVA_HOME=/usr/local/jdk-${JDK_VERSION}
 
