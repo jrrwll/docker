@@ -20,5 +20,3 @@
 *.box
 .vagrant
 docker-fonts
-*.so
-xpdf-chinese-simplified/
