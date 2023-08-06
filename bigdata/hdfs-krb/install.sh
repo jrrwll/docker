@@ -16,17 +16,19 @@ sed -i "s/\${HDFS_PRINCIPAL}/hdfs\/$KRB5_DOMAIN@$KRB5_REALM/" krb5-cfg-hdfs.sh
 sed -i "s/\${HTTP_PRINCIPAL}/HTTP\/$KRB5_DOMAIN@$KRB5_REALM/" krb5-cfg-hdfs.sh
 sed -i "s/\${HIVE_PRINCIPAL}/hive\/$KRB5_DOMAIN@$KRB5_REALM/" krb5-cfg-hive.sh
 
+REPO=bde2020
 HADOOP_VERSION=$(grep HADOOP_VERSION version.conf | cut -f2 -d'=')
 HIVE_VERSION=$(grep HIVE_VERSION version.conf | cut -f2 -d'=')
 POSTGRESQL_VERSION=$(grep POSTGRESQL_VERSION version.conf | cut -f2 -d'=')
 HBASE_VERSION=$(grep HBASE_VERSION version.conf | cut -f2 -d'=')
 PRESTODB_VERSION=$(grep PRESTODB_VERSION version.conf | cut -f2 -d'=')
 
-sed -i "s/\${HADOOP_VERSION}/$HADOOP_VERSION/g" docker-compose.yaml
-sed -i "s/\${HIVE_VERSION}/$HIVE_VERSION/g" docker-compose.yaml
-sed -i "s/\${POSTGRESQL_VERSION}/$POSTGRESQL_VERSION/g" docker-compose.yaml
-sed -i "s/\${HBASE_VERSION}/$HBASE_VERSION/g" docker-compose.yaml
-sed -i "s/\${PRESTODB_VERSION}/$PRESTODB_VERSION/g" docker-compose.yaml
+sed -i "s/\${HADOOP_VERSION}/$HADOOP_VERSION/" docker-compose.yaml
+sed -i "s/\${HIVE_VERSION}/$HIVE_VERSION/" docker-compose.yaml
+sed -i "s/\${POSTGRESQL_VERSION}/$POSTGRESQL_VERSION/" docker-compose.yaml
+sed -i "s/\${HBASE_VERSION}/$HBASE_VERSION/" docker-compose.yaml
+sed -i "s/\${PRESTODB_VERSION}/$PRESTODB_VERSION/" docker-compose.yaml
+sed -i "s/\${REPO}/${REPO}/" docker-compose.yaml
 
 PROJECT_NAME=hdfs
 NETWORK=$PROJECT_NAME
