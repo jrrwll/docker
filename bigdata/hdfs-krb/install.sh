@@ -10,18 +10,18 @@ KRB5_IP=$1
 KRB5_DOMAIN=$2
 KRB5_REALM=$3
 if [ -z $KRB5_DOMAIN ]; then KRB5_DOMAIN=my.domain; fi
-# KRB5_REALM=$(echo $KRB5_DOMAIN | tr '[a-z]' '[A-Z]')
-if [ -z $KRB5_REALM ]; then KRB5_REALM=MY.DOMAIN; fi
+if [ -z $KRB5_REALM ]; then KRB5_REALM=$(echo $KRB5_DOMAIN | tr '[a-z]' '[A-Z]'); fi
 
 sed -i "s/\${HDFS_PRINCIPAL}/hdfs\/$KRB5_DOMAIN@$KRB5_REALM/" krb5-cfg-hdfs.sh
 sed -i "s/\${HTTP_PRINCIPAL}/HTTP\/$KRB5_DOMAIN@$KRB5_REALM/" krb5-cfg-hdfs.sh
 sed -i "s/\${HIVE_PRINCIPAL}/hive\/$KRB5_DOMAIN@$KRB5_REALM/" krb5-cfg-hive.sh
 
-HADOOP_VERSION=2.0.0-hadoop3.2.1-java8
-HIVE_VERSION=2.3.2-postgresql-metastore
-POSTGRESQL_VERSION=2.3.0
-HBASE_VERSION=1.0.0-hbase1.2.6
-PRESTODB_VERSION=0.245.1
+HADOOP_VERSION=$(grep HADOOP_VERSION version.conf | cut -f2 -d'=')
+HIVE_VERSION=$(grep HIVE_VERSION version.conf | cut -f2 -d'=')
+POSTGRESQL_VERSION=$(grep POSTGRESQL_VERSION version.conf | cut -f2 -d'=')
+HBASE_VERSION=$(grep HBASE_VERSION version.conf | cut -f2 -d'=')
+PRESTODB_VERSION=$(grep PRESTODB_VERSION version.conf | cut -f2 -d'=')
+
 sed -i "s/\${HADOOP_VERSION}/$HADOOP_VERSION/g" docker-compose.yaml
 sed -i "s/\${HIVE_VERSION}/$HIVE_VERSION/g" docker-compose.yaml
 sed -i "s/\${POSTGRESQL_VERSION}/$POSTGRESQL_VERSION/g" docker-compose.yaml
@@ -29,10 +29,10 @@ sed -i "s/\${HBASE_VERSION}/$HBASE_VERSION/g" docker-compose.yaml
 sed -i "s/\${PRESTODB_VERSION}/$PRESTODB_VERSION/g" docker-compose.yaml
 
 PROJECT_NAME=hdfs
-HDFS_NETWORK=$PROJECT_NAME
-sed -i "s/\${HDFS_NETWORK}/$HDFS_NETWORK/g" docker-compose.yaml
+NETWORK=$PROJECT_NAME
+sed -i "s/\${NETWORK}/$NETWORK/g" docker-compose.yaml
 
-docker network create $HDFS_NETWORK
+docker network create $NETWORK
 docker volume create ${PROJECT_NAME}_hadoop_namenode
 docker volume create ${PROJECT_NAME}_hadoop_datanode
 docker volume create ${PROJECT_NAME}_hadoop_historyserver

@@ -27,7 +27,7 @@ services:
     environment:
       - CLUSTER_NAME=${NETWORK}
     env_file:
-      - ./hadoop.env
+      - hdfs.env
     deploy:
       mode: replicated
       replicas: 1
@@ -43,7 +43,7 @@ services:
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
     env_file:
-      - ./hadoop.env
+      - hdfs.env
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
     depends_on:
@@ -62,7 +62,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864"
     env_file:
-      - ./hadoop.env
+      - hdfs.env
     depends_on:
       - namenode
       - datanode
@@ -83,7 +83,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     env_file:
-      - ./hadoop.env
+      - hdfs.env
     depends_on:
       - namenode
       - datanode
@@ -104,7 +104,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 resourcemanager:8088"
     env_file:
-      - ./hadoop.env
+      - hdfs.env
     depends_on:
       - namenode
       - datanode
@@ -135,7 +135,7 @@ services:
 #    environment:
 #      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864"
 #    env_file:
-#      - ./hadoop.env
+#      - ./hdfs.env
 #    depends_on:
 #      - namenode
 #      - datanode
@@ -169,7 +169,7 @@ services:
     container_name: hive-metastore
     hostname: hive-metastore
     env_file:
-      - ./hadoop-hive.env
+      - hive.env
     command: /opt/hive/bin/hive --service metastore
     environment:
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode:9864 postgresql:5432"
@@ -193,7 +193,7 @@ services:
     container_name: hive-server
     hostname: hive-server
     env_file:
-      - ./hadoop-hive.env
+      - hive.env
     environment:
       HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
       SERVICE_PRECONDITION: "namenode:9000 namenode:9870 hive-metastore:9083"
