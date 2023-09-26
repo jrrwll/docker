@@ -1,0 +1,28 @@
+version: 3
+services:
+  doris-fe:
+    image: "freeoneplus/apache-doris:fe-1.1.2-lts-20220920-x86"
+    container_name: "doris-fe"
+    tty: true
+    hostname: "fe"
+    restart: always
+    ports:
+      # - 8030:8030
+      - 9030:9030
+    networks:
+      doris:
+  doris-be:
+    image: "freeoneplus/apache-doris:be-1.1.2-lts-20220920-x86"
+    container_name: "doris-be"
+    tty: true
+    hostname: "fe"
+    restart: always
+    # ports:
+    #   - 8040:8040
+    #   - 9000:9000
+    #   - 9050:9050
+    networks:
+      doris:
+networks:
+  doris:
+    external: true
