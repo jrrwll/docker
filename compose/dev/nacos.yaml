@@ -1,0 +1,37 @@
+services:
+  nacos1:
+    image: nacos/nacos-server
+    networks:
+      - dev
+    hostname: nacos1
+    container_name: nacos1
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    env_file:
+      - ./nacos-hostname.env
+    restart: on-failure
+
+  nacos2:
+    image: nacos/nacos-server
+    networks:
+      - dev
+    hostname: nacos2
+    container_name: nacos2
+    env_file:
+      - ./nacos-hostname.env
+    restart: on-failure
+
+  nacos3:
+    image: nacos/nacos-server
+    networks:
+      - dev
+    hostname: nacos3
+    container_name: nacos3
+    env_file:
+      - ./nacos-hostname.env
+    restart: on-failure
+
+networks:
+  dev:
+    external: true

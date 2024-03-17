@@ -1,0 +1,131 @@
+services:
+  postgresql16:
+    image: postgres:16
+    networks:
+      - dev
+    container_name: postgresql16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${PASSWORD}
+
+  mysql57:
+    image: mysql:5.7
+    networks:
+      - dev
+    container_name: mysql57
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql57:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+
+  mysql80:
+    image: mysql:8.0
+    networks:
+      - dev
+    container_name: mysql80
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql80:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+
+  # https://github.com/bitnami/containers/tree/main/bitnami/kafka#how-to-use-this-image
+  kafka37:
+    image: bitnami/kafka:3.7
+    container_name: kafka34
+    networks:
+      - dev
+    ports:
+      - "9092:9092"
+    volumes:
+      - ./kafka37:/bitnami/kafka
+    environment:
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka37:9093
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+  # https://github.com/provectus/kafka-ui
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    networks:
+      - dev
+    ports:
+      - "9093:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka37:9092
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    networks:
+      - dev
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d/
+
+  flink-jobmanager:
+    image: flink
+    container_name: flink-jobmanager
+    networks:
+      - dev
+    ports:
+      - "8081:8081"
+    command: jobmanager
+    environment:
+      FLINK_PROPERTIES: "jobmanager.rpc.address: flink-jobmanager"
+
+  flink-taskmanager1:
+    image: flink
+    container_name: flink-taskmanager1
+    networks:
+      - dev
+    command: taskmanager
+    environment:
+      FLINK_PROPERTIES: "jobmanager.rpc.address: flink-jobmanager"
+
+  flink-taskmanager2:
+    image: flink
+    container_name: flink-taskmanager2
+    networks:
+      - dev
+    command: taskmanager
+    environment:
+      FLINK_PROPERTIES: "jobmanager.rpc.address: flink-jobmanager"
+
+  nacos:
+    image: nacos/nacos-server
+    networks:
+      - dev
+    container_name: nacos
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    environment:
+      PREFER_HOST_MODE: hostname
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql57
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_USER: nacos
+      MYSQL_SERVICE_PASSWORD: nacos
+      MYSQL_SERVICE_DB_NAME: nacos
+    volumes:
+      - ./nacos:/home/nacos/logs
+    restart: on-failure
+
+networks:
+  dev:
+    name: dev
+    driver: bridge

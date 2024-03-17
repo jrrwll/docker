@@ -20,7 +20,7 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ${LOCAL_PATH}/mysql_57_data:/var/lib/mysql
+      - ${LOCAL_PATH}/mysql57:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${PASSWORD}
 
@@ -33,7 +33,7 @@ services:
     ports:
       - 3307:3306
     volumes:
-      - ${LOCAL_PATH}/mysql_80_data:/var/lib/mysql
+      - ${LOCAL_PATH}/mysql80:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${PASSWORD}
 
@@ -45,7 +45,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ${LOCAL_PATH}/mongodb_42_data:/data/db
+      - ${LOCAL_PATH}/mongodb42:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
@@ -59,7 +59,7 @@ services:
     ports:
       - "9092:9092"
     volumes:
-      - ${LOCAL_PATH}/kafka_34_data:/bitnami/kafka
+      - ${LOCAL_PATH}/kafka34:/bitnami/kafka
     environment:
       - ALLOW_PLAINTEXT_LISTENER=yes
 
@@ -71,7 +71,7 @@ services:
     ports:
       - "50000:50000"
     volumes:
-      - ${LOCAL_PATH}/db2_data:/database/data
+      - ${LOCAL_PATH}/db2:/database/data
     environment:
       - LICENSE=accept
       - DB2INST1_PASSWORD=${PASSWORD}
@@ -84,7 +84,7 @@ services:
     ports:
       - "54305:5432"
     volumes:
-      - ${LOCAL_PATH}/greenplum_68_data:/data
+      - ${LOCAL_PATH}/greenplum68:/data
     privileged: true
     hostname: greenplum68
     security_opt:
@@ -105,7 +105,7 @@ services:
     ports:
       - "8123:8123"
     volumes:
-      - ${LOCAL_PATH}/clickhouse_228_data:/bitnami/clickhouse
+      - ${LOCAL_PATH}/clickhouse228:/bitnami/clickhouse
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - CLICKHOUSE_ADMIN_USER=root
@@ -119,7 +119,7 @@ services:
     ports:
       - "1521:1521"
     volumes:
-      - ${LOCAL_PATH}/oracle_112_data:/u01/app/oracle
+      - ${LOCAL_PATH}/oracle112:/u01/app/oracle
     environment:
       - ORACLE_USER=root
       - ORACLE_PASSWORD=${PASSWORD}
@@ -133,7 +133,7 @@ services:
       - "1433:1433"
     user: "0:0"
     volumes:
-      - ${LOCAL_PATH}/sqlserver_2022_data:/var/opt/mssql/data
+      - ${LOCAL_PATH}/sqlserver2022:/var/opt/mssql/data
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=${PASSWORD}
@@ -148,10 +148,11 @@ services:
       - "8030:8030"
       - "8040:8040"
     volumes:
-      - ${LOCAL_PATH}/doris_111_data:/data/deploy/apache-doris-1.1.1-bin-x86/be/storage
+      - ${LOCAL_PATH}/doris111:/data/deploy/apache-doris-1.1.1-bin-x86/be/storage
     privileged: true
 
   # https://hub.docker.com/r/apachepulsar/pulsar
+  # uid 10000 for pulsar
   pulsar300:
     image: apachepulsar/pulsar:3.0.0
     container_name: pulsar300
@@ -162,7 +163,7 @@ services:
       - "8081:8080"
     command: bin/pulsar standalone
     volumes:
-      - ${LOCAL_PATH}/pulsar_300_data:/pulsar/data
+      - ${LOCAL_PATH}/pulsar300:/pulsar/data
       # - ${LOCAL_PATH}/pulsar_300_conf:/pulsar/conf
     privileged: true
 
@@ -174,7 +175,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - ${LOCAL_PATH}/opengauss_500_data:/var/lib/opengauss/data
+      - ${LOCAL_PATH}/opengauss500:/var/lib/opengauss/data
     privileged: true
     environment:
       - GS_PASSWORD=${PASSWORD}
