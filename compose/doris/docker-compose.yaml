@@ -1,4 +1,4 @@
-version: 3
+version: '3'
 services:
   doris-fe:
     image: "freeoneplus/apache-doris:fe-1.1.2-lts-20220920-x86"
