@@ -1,0 +1,7 @@
+services:
+
+
+networks:
+  dev:
+    name: starrocks
+    driver: bridge

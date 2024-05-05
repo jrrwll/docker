@@ -1,4 +1,3 @@
-version: '3'
 services:
   doris-fe:
     image: "freeoneplus/apache-doris:fe-1.1.2-lts-20220920-x86"
@@ -23,6 +22,8 @@ services:
     #   - 9050:9050
     networks:
       doris:
+
 networks:
-  doris:
-    external: true
+  dev:
+    name: doris
+    driver: bridge
