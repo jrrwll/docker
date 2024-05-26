@@ -2,6 +2,7 @@ FROM jerrywill/oraclejre:8
 
 MAINTAINER "tuke tukeof@gmail.com"
 
+# https://flume.apache.org/download.html
 # https://dlcdn.apache.org/flume/1.11.0/apache-flume-1.11.0-bin.tar.gz
 ENV FLUME_VERSION=1.11.0
 
