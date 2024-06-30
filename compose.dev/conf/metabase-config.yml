@@ -1,0 +1,16 @@
+#MB_CONFIG_FILE_PATH
+
+version: 1
+config:
+  settings:
+    config-from-file-sync-databases: false
+  users:
+    - first_name: John
+      last_name: Doe
+      email: metabase@example.com
+      password: metabase
+      is_superuser: true
+  databases:
+    - name: my-database
+      engine: postgres
+      details: ...
