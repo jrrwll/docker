@@ -1,4 +1,4 @@
-FROM jerrywill/oraclejre:8
+FROM jerrywill/jre:17
 
 MAINTAINER "tuke tukeof@gmail.com"
 
@@ -12,4 +12,8 @@ ADD https://downloads.metabase.com/$METABASE_VERSION/metabase.jar /opt/metabase/
 
 EXPOSE 3000
 
+WORKDIR /opt/metabase
+
 ENTRYPOINT java -jar /opt/metabase/metabase.jar
+
+#docker build -t jerrywill/metabase .

@@ -12,4 +12,4 @@ RUN ln -s ${JAVA_HOME}/bin/* /usr/local/bin/
 
 WORKDIR ${JAVA_HOME}
 
-# docker build -t . jerrywill/jre:17
+# docker build -f 17.Dockerfile -t jerrywill/jre:17 .
