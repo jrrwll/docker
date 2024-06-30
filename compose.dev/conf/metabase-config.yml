@@ -5,12 +5,16 @@ config:
   settings:
     config-from-file-sync-databases: false
   users:
-    - first_name: John
-      last_name: Doe
-      email: metabase@example.com
+    - first_name: Jerry
+      last_name: Will
+      email: metabase@dreamcat.org
       password: metabase
       is_superuser: true
   databases:
-    - name: my-database
-      engine: postgres
-      details: ...
+    - name: mysql
+      engine: mysql
+      host:
+      port:
+      user: root
+      password: "{{ env MYSQL_PASSWORD }}"
+      dbname: sampledb
