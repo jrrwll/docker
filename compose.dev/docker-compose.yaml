@@ -1,9 +1,9 @@
 services:
-  postgresql16:
+  postgresql:
     image: postgres:16
     networks:
       - dev
-    container_name: postgresql16
+    container_name: postgresql
     ports:
       - "5432:5432"
     environment:
@@ -22,16 +22,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${PASSWORD}
 
-  mysql80:
+  mysql:
     image: mysql:8.0
     networks:
       - dev
-    container_name: mysql80
+    container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3307:3306"
     volumes:
-      - ./mysql80:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${PASSWORD}
 
@@ -94,6 +94,24 @@ services:
       MYSQL_SERVICE_DB_NAME: nacos
     volumes:
       - ./nacos:/home/nacos/logs
+    restart: on-failure
+
+  sonarqube:
+    image: sonarqube
+    networks:
+      - dev
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: true
+      SONAR_JDBC_URL: jdbc:postgresql://postgresql:5432/sonarqube
+      SONAR_JDBC_USERNAME: sonarqube
+      SONAR_JDBC_PASSWORD: sonarqube
+    volumes:
+      - ./sonarqube/logs:/opt/sonarqube/logs
+      - ./sonarqube/data:/opt/sonarqube/data
+      - ./sonarqube/extensions:/opt/sonarqube/extensions
     restart: on-failure
 
 networks:
