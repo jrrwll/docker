@@ -7,9 +7,9 @@ services:
     ports:
       - "8100:8100"
     volumes:
-      - ./dataease/conf:/opt/apps/config
-      - ./dataease/data:/opt/dataease2.0/data
-      - ./dataease/logs:/opt/dataease2.0/logs
+      - ./conf:/opt/apps/config
+      - ./data:/opt/dataease2.0/data
+      - ./logs:/opt/dataease2.0/logs
     depends_on:
       # mysql:8.3
       - mysql
@@ -20,7 +20,7 @@ services:
     networks:
       - dev
     volumes:
-      - ./dataease/etcd_data:/bitnami/etcd
+      - ./etcd_data:/bitnami/etcd
     environment:
       ETCD_ENABLE_V2: "true"
       ALLOW_NONE_AUTHENTICATION: "yes"
@@ -35,9 +35,9 @@ services:
       - 9180:9180
       - 9080:9080
     volumes:
-      - ./dataease/apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
-      - ./dataease/apisix/logs:/usr/local/apisix/logs
-      - ./dataease/apisix/plugins/cas-auth.lua:/usr/local/apisix/apisix/plugins/cas-auth.lua
+      - ./apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./apisix/logs:/usr/local/apisix/logs
+      - ./apisix/plugins/cas-auth.lua:/usr/local/apisix/apisix/plugins/cas-auth.lua
     environment:
       TZ: "Asia/Shanghai"
     depends_on:
@@ -51,7 +51,7 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ./dataease/apisix/dashboard_config.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+      - ./apisix/dashboard_config.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
 
 networks:
   dev:

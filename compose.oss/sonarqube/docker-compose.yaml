@@ -1,0 +1,25 @@
+services:
+  sonarqube:
+    image: sonarqube
+    networks:
+      - dev
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: true
+      SONAR_JDBC_URL: jdbc:postgresql://postgresql:5432/sonarqube
+      SONAR_JDBC_USERNAME: sonarqube
+      SONAR_JDBC_PASSWORD: sonarqube
+    volumes:
+      - ./sonarqube/logs:/opt/sonarqube/logs
+      - ./sonarqube/data:/opt/sonarqube/data
+      - ./sonarqube/extensions:/opt/sonarqube/extensions
+    restart: on-failure
+    depends_on:
+      - postgresql
+
+networks:
+  dev:
+    name: dev
+    driver: bridge

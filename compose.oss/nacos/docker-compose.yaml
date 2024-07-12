@@ -1,0 +1,28 @@
+services:
+  nacos:
+    image: nacos/nacos-server
+    networks:
+      - dev
+    container_name: nacos
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    environment:
+      PREFER_HOST_MODE: hostname
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql57
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_USER: nacos
+      MYSQL_SERVICE_PASSWORD: nacos
+      MYSQL_SERVICE_DB_NAME: nacos
+    volumes:
+      - ./nacos:/home/nacos/logs
+    restart: on-failure
+    depends_on:
+      - mysql57
+
+networks:
+  dev:
+    name: dev
+    driver: bridge

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PASSWORD=
+PASSWORD=root
 sed -i "s/\${PASSWORD}/$PASSWORD/g" docker-compose.yaml
 
 docker-compose up -d
