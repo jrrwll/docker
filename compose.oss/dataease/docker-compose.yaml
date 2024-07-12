@@ -1,4 +1,5 @@
 services:
+  # depends_on mysql:8.3
   dataease:
     image: jerrywill/dataease:v2.8.0
     container_name: dataease
@@ -10,17 +11,17 @@ services:
       - ./conf:/opt/apps/config
       - ./data:/opt/dataease2.0/data
       - ./logs:/opt/dataease2.0/logs
-    depends_on:
-      # mysql:8.3
-      - mysql
 
   dataease-etcd:
     image: jerrywill/dataease-etcd:3.5.10
     container_name: dataease-etcd
+    hostname: dataease-etcd
     networks:
       - dev
+    ports:
+      - "2379:2379"
     volumes:
-      - ./etcd_data:/bitnami/etcd
+      - ./etcd:/bitnami/etcd
     environment:
       ETCD_ENABLE_V2: "true"
       ALLOW_NONE_AUTHENTICATION: "yes"
@@ -52,8 +53,11 @@ services:
       - 9000:9000
     volumes:
       - ./apisix/dashboard_config.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+    depends_on:
+      - dataease-etcd
 
 networks:
   dev:
+    external: true
     name: dev
     driver: bridge
