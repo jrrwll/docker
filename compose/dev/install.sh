@@ -8,7 +8,6 @@ docker-compose up -d
 sudo chown -R "1001:$(id -g -n)" kafka37
 
 LOCAL_IP=
-sed -i "s/\${LOCAL_IP}/$LOCAL_IP/g" dev.dreamcat.org.conf
-mv dev.dreamcat.org.conf nginx/
+sed -i "s/\${LOCAL_IP}/$LOCAL_IP/g" nginx/dev.dreamcat.org.conf
 # docker exec -it nginx nginx -s reload
 docker exec -it nginx nginx -t
