@@ -1,0 +1,59 @@
+services:
+  dataease:
+    image: jerrywill/dataease:v2.8.0
+    container_name: dataease
+    networks:
+      - dev
+    ports:
+      - "8100:8100"
+    volumes:
+      - ./dataease/conf:/opt/apps/config
+      - ./dataease/data:/opt/dataease2.0/data
+      - ./dataease/logs:/opt/dataease2.0/logs
+    depends_on:
+      # mysql:8.3
+      - mysql
+
+  dataease-etcd:
+    image: jerrywill/dataease-etcd:3.5.10
+    container_name: dataease-etcd
+    networks:
+      - dev
+    volumes:
+      - ./dataease/etcd_data:/bitnami/etcd
+    environment:
+      ETCD_ENABLE_V2: "true"
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_ADVERTISE_CLIENT_URLS: "http://dataease-etcd:2379"
+
+  dataease-apisix:
+    image: jerrywill/dataease-apisix:3.6.0
+    container_name: dataease-apisix
+    networks:
+      - dev
+    ports:
+      - 9180:9180
+      - 9080:9080
+    volumes:
+      - ./dataease/apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
+      - ./dataease/apisix/logs:/usr/local/apisix/logs
+      - ./dataease/apisix/plugins/cas-auth.lua:/usr/local/apisix/apisix/plugins/cas-auth.lua
+    environment:
+      TZ: "Asia/Shanghai"
+    depends_on:
+      - dataease-etcd
+
+  dataease-apisix-dashboard:
+    image: jerrywill/dataease-apisix-dashboard:3.0.1
+    container_name: dataease-apisix-dashboard
+    networks:
+      - dev
+    ports:
+      - 9000:9000
+    volumes:
+      - ./dataease/apisix/dashboard_config.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+
+networks:
+  dev:
+    name: dev
+    driver: bridge
