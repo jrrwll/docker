@@ -1,0 +1,16 @@
+server:
+  tomcat:
+    connection-timeout: 70000
+spring:
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+  datasource:
+    url: jdbc:mysql://mysql:3306/dataease?autoReconnect=false&useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+dataease:
+  apisix-api:
+    domain: http://dataease-apisix:9180
+    key: DE_APISIX_KEY

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# https://dataease.io/docs/v2/installation/offline_INSTL_and_UPG
 # https://community.fit2cloud.com/#/products/dataease/downloads
 DATAEASE_VERSION=v2.8.0
 DATAEASE_HOME=dataease-offline-installer-$DATAEASE_VERSION-ce

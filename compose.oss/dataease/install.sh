@@ -12,3 +12,6 @@ sudo chown -R "1001:$(id -g -n)" etcd
 docker exec -it mysql mysql -uroot -p -e "
 CREATE DATABASE IF NOT EXISTS dataease DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 "
+
+# 8100
+# admin DataEase@123456
