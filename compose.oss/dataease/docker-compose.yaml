@@ -21,7 +21,7 @@ services:
     ports:
       - "2379:2379"
     volumes:
-      - ./etcd:/bitnami/etcd
+      - ./etcd:/bitnami/etcd/data
     environment:
       ETCD_ENABLE_V2: "true"
       ALLOW_NONE_AUTHENTICATION: "yes"
@@ -37,7 +37,6 @@ services:
       - 9080:9080
     volumes:
       - ./apisix/config.yaml:/usr/local/apisix/conf/config.yaml:ro
-      - ./apisix/logs:/usr/local/apisix/logs
       - ./apisix/plugins/cas-auth.lua:/usr/local/apisix/apisix/plugins/cas-auth.lua
     environment:
       TZ: "Asia/Shanghai"
