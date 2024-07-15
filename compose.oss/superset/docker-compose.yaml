@@ -1,0 +1,20 @@
+services:
+  superset:
+    image: jerrywill/superset:3.1.3-chrome
+    container_name: superset
+    hostname: superset
+    networks:
+      - dev
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./superset/superset_config.py:/app/pythonpath/superset_config.py
+      - ./superset/superset.db:/app/superset_home/superset.db
+    environment:
+      - TZ=Asia/Shanghai
+
+networks:
+  dev:
+    external: true
+    name: dev
+    driver: bridge
