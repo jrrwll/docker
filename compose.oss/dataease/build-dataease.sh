@@ -31,3 +31,15 @@ docker pull $APISIX_DASHBOARD_IMG
 docker tag $APISIX_DASHBOARD_IMG jerrywill/dataease-apisix-dashboard:3.0.1
 docker rmi $APISIX_DASHBOARD_IMG
 docker push jerrywill/dataease-apisix-dashboard:3.0.1
+
+SYNC_TASK_IMG=registry.cn-qingdao.aliyuncs.com/dataease/dataease-sync-task:v2.8.0
+docker pull $SYNC_TASK_IMG
+docker tag $SYNC_TASK_IMG jerrywill/dataease-sync-task:v2.8.0
+docker rmi $SYNC_TASK_IMG
+docker push jerrywill/dataease-sync-task:v2.8.0
+
+CHROMIUM_TAG=registry.cn-qingdao.aliyuncs.com/dataease/standalone-chromium:123.0
+docker pull $CHROMIUM_TAG
+docker tag $CHROMIUM_TAG jerrywill/dataease-chromium:123.0
+docker rmi $CHROMIUM_TAG
+docker push jerrywill/dataease-chromium:123.0
