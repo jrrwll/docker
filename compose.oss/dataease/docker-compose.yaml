@@ -55,30 +55,30 @@ services:
     depends_on:
       - dataease-etcd
 
-  dataease-sync-task:
-    image: jerrywill/dataease-sync-task:v2.8.0
-    container_name: dataease-sync-task
-    networks:
-      - dev
-
-  dataease-selenium:
-    image: jerrywill/dataease-chromium:123.0
-    container_name: dataease-selenium
-    networks:
-      - dev
-    shm_size: 2gb
-    privileged: true
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 2g
-    environment:
-      - SE_START_XVFB=false
-      - SE_ENABLE_BROWSER_LEFTOVERS_CLEANUP=true
-      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-      - SE_NODE_MAX_SESSIONS=5
-      - TZ=Asia/Shanghai
+#  dataease-sync-task:
+#    image: jerrywill/dataease-sync-task:v2.8.0
+#    container_name: dataease-sync-task
+#    networks:
+#      - dev
+#
+#  dataease-selenium:
+#    image: jerrywill/dataease-chromium:123.0
+#    container_name: dataease-selenium
+#    networks:
+#      - dev
+#    shm_size: 2gb
+#    privileged: true
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '1'
+#          memory: 2g
+#    environment:
+#      - SE_START_XVFB=false
+#      - SE_ENABLE_BROWSER_LEFTOVERS_CLEANUP=true
+#      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+#      - SE_NODE_MAX_SESSIONS=5
+#      - TZ=Asia/Shanghai
 
 networks:
   dev:

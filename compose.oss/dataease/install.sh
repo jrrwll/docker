@@ -15,3 +15,6 @@ CREATE DATABASE IF NOT EXISTS dataease DEFAULT CHARACTER SET utf8mb4 COLLATE utf
 
 # 8100
 # admin DataEase@123456
+# update per_user set password='504c8c8dfcbbe5b50d676ad65ef43909' where username='admin';
+
+# https://dataease.io/features.html
