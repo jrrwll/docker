@@ -1,20 +1,32 @@
-#MB_CONFIG_FILE_PATH
-
+# https://www.metabase.com/docs/latest/configuring-metabase/config-file
+# MB_CONFIG_FILE_PATH
 version: 1
 config:
   settings:
     config-from-file-sync-databases: false
+    password-complexity: weak
+    check-for-updates: false
+    start-of-week: monday
+    site-name: metabase
+    email-from-name: Jerry Will
+    email-from-address: metabase@dreamcat.org
+    enable-public-sharing: true
   users:
     - first_name: Jerry
       last_name: Will
       email: metabase@dreamcat.org
-      password: metabase
+      password: metabase@123
       is_superuser: true
   databases:
     - name: mysql
       engine: mysql
-      host:
-      port:
-      user: root
-      password: "{{ env MYSQL_PASSWORD }}"
-      dbname: sampledb
+      details:
+        host: mysql57
+        port: 3306
+        user: root
+        password: "{{ env MYSQL57_PASSWORD }}"
+        dbname: test
+      uploads_enabled: true
+      uploads_schema_name: metabase
+      uploads_table_prefix: uploads_
+

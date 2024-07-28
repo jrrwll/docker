@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 # a init SQL to create tables and insert data
+[[ ! -f mysql-schema.sql ]] && \
 wget https://raw.githubusercontent.com/alibaba/nacos/develop/distribution/conf/mysql-schema.sql
+
 docker cp mysql-schema.sql mysql57:/
 
 docker exec -it mysql57 mysql -uroot -p -e "
