@@ -18,7 +18,8 @@ RUN curl -o /opt/metabase/metabase.jar https://downloads.metabase.com/$METABASE_
 
 COPY entrypoint.sh /opt/metabase/entrypoint.sh
 
-CMD bash -c '/opt/metabase/entrypoint.sh &' && \
-    java -jar /opt/metabase/metabase.jar | tee -a /opt/metabase/metabase.log
+CMD touch /opt/metabase/metabase.log && \
+    bash -c '/opt/metabase/entrypoint.sh &' && \
+    tail -n +1 -f /opt/metabase/metabase.log
 
 #docker build -t jerrywill/metabase .

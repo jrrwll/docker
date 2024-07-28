@@ -1,10 +1,16 @@
 #!/bin/bash
 
 LOG_FILE=/opt/metabase/metabase.log
+nohup java -jar /opt/metabase/metabase.jar > $LOG_FILE  2>&1 &
 
-ADMIN_FULL_NAME=${ADMIN_FULL_NAME:John Doe}
+METABASE_HOST=localhost
+METABASE_PORT=3000
+SITE_NAME=${SITE_NAME:-Metabase}
+ADMIN_EMAIL=${ADMIN_EMAIL:-admin@metabase.com}
+ADMIN_PASSWORD=Metabase@123
+ADMIN_FULL_NAME=${ADMIN_FULL_NAME:-John Doe}
 ADMIN_FIRST_NAME=$(echo $ADMIN_FULL_NAME | cut -d' ' -f1)
-ADMIN_LAST_NAME=$(echo $ADMIN_FULL_NAME | cut -c $((${#ADMIN_FIRST_NAME} + 1))-)
+ADMIN_LAST_NAME=$(echo $ADMIN_FULL_NAME | cut -c $((${#ADMIN_FIRST_NAME} + 2))-)
 
 echo "⌚︎ Waiting for Metabase to start" >> $LOG_FILE
 while (! curl -s -m 5 http://${METABASE_HOST}:${METABASE_PORT}/api/session/properties -o /dev/null); do sleep 5; done
@@ -23,14 +29,14 @@ MB_TOKEN=$(curl -s -X POST \
     -d '{
     "token": "'${SETUP_TOKEN}'",
     "user": {
-        "email": "'${ADMIN_EMAIL:admin@metabase.com}'",
+        "email": "'${ADMIN_EMAIL}'",
         "first_name": "'${ADMIN_FIRST_NAME}'",
         "last_name": "'${ADMIN_LAST_NAME}'",
-        "password": "'${ADMIN_PASSWORD:metabase}'"
+        "password": "'${ADMIN_PASSWORD}'"
     },
     "prefs": {
         "allow_tracking": false,
-        "site_name": "Metawhat"
+        "site_name": "'${SITE_NAME}'"
     }
 }' | jq -r '.id')
 
