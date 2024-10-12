@@ -36,5 +36,6 @@ docker run -d --name metabase \
   -e "MB_DB_USER=root" \
   -e "MB_DB_PASS=root" \
   -e "MB_DB_HOST=mysql" \
+  -e "MB_SITE_LOCALE: zh" \
   metabase/metabase
 ```

@@ -1,5 +1,11 @@
 services:
-  fe
+  fe1:
+    image: jerrywill/starrocks:3.2-fe
+  fe2:
+  fe3:
+  cn1:
+  cn2:
+  cn3:
 
 networks:
   dev:

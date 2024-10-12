@@ -15,7 +15,7 @@ config:
     - first_name: Jerry
       last_name: Will
       email: metabase@dreamcat.org
-      password: metabase@123
+      password: Metabase@123
       is_superuser: true
   databases:
     - name: mysql

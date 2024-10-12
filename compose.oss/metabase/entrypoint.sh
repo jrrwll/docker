@@ -17,6 +17,16 @@ while (! curl -s -m 5 http://${METABASE_HOST}:${METABASE_PORT}/api/session/prope
 
 echo "😎 Creating admin user" >> $LOG_FILE
 
+HAS_USER_SETUP=$(curl -s -m 5 -X GET \
+    -H "Content-Type: application/json" \
+    http://${METABASE_HOST}:${METABASE_PORT}/api/session/properties \
+    | jq -r '.["has-user-setup"]'
+)
+if [[ $HAS_USER_SETUP = 'true' ]]; then
+  echo "😯 Already setup, skip it" >> $LOG_FILE
+  exit 0
+fi
+
 SETUP_TOKEN=$(curl -s -m 5 -X GET \
     -H "Content-Type: application/json" \
     http://${METABASE_HOST}:${METABASE_PORT}/api/session/properties \
