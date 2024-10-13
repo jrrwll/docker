@@ -1,13 +1,129 @@
 services:
   fe1:
-    image: jerrywill/starrocks:3.2-fe
+    image: jerrywill/starrocks:${IMAGE_VERSION}-fe
+    container_name: starrocks-fe-1
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "9030:9030"
+    volumes:
+      - ./conf/fe.conf:/opt/starrocks/fe/conf/fe.conf
+      - ./data/meta1:/opt/starrocks/fe/meta
+      - ./log/fe1:/opt/starrocks/fe/log
+    networks:
+       starrocks:
+         ipv4_address: 172.90.30.3
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
+      interval: 10s
+      timeout: 20s
+      retries: 3
   fe2:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-fe
+    container_name: starrocks-fe-2
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "9031:9030"
+    volumes:
+      - ./conf/fe.conf:/opt/starrocks/fe/conf/fe.conf
+      - ./data/meta2:/opt/starrocks/fe/meta
+      - ./log/fe2:/opt/starrocks/fe/log
+    networks:
+      - starrocks
+    depends_on:
+      - fe1
+    command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper 172.90.30.3:9010"]
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
+      interval: 10s
+      timeout: 20s
+      retries: 3
   fe3:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-fe
+    container_name: starrocks-fe-3
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "9032:9030"
+    volumes:
+      - ./conf/fe.conf:/opt/starrocks/fe/conf/fe.conf
+      - ./data/meta3:/opt/starrocks/fe/meta
+      - ./log/fe3:/opt/starrocks/fe/log
+    networks:
+      - starrocks
+    depends_on:
+      - fe1
+    command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper 172.90.30.3:9010"]
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
+      interval: 10s
+      timeout: 20s
+      retries: 3
   cn1:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-cn
+    container_name: starrocks-cn-1
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/cn.conf:/opt/starrocks/be/conf/cn.conf
+      - ./data/storage1:/opt/starrocks/be/storage
+      - ./log/cn1:/opt/starrocks/be/log
+    networks:
+      - starrocks
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
   cn2:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-cn
+    container_name: starrocks-cn-2
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/cn.conf:/opt/starrocks/be/conf/cn.conf
+      - ./data/storage2:/opt/starrocks/be/storage
+      - ./log/cn2:/opt/starrocks/be/log
+    networks:
+      - starrocks
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
   cn3:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-cn
+    container_name: starrocks-cn-3
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/cn.conf:/opt/starrocks/be/conf/cn.conf
+      - ./data/storage3:/opt/starrocks/be/storage
+      - ./log/cn3:/opt/starrocks/be/log
+    networks:
+      - starrocks
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
 
 networks:
-  dev:
-    name: starrocks
-    driver: bridge
+  starrocks:
+    external: true
+#    ipam:
+#      config:
+#        - subnet: 172.90.30.0/24
