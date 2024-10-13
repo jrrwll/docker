@@ -36,7 +36,8 @@ else
   cat <<EOF > cn.Dockerfile
 FROM jerrywill/starrocks:$BE_VERSION
 
-CMD \${STARROCKS_HOME}/be/bin/start_cn.sh
+CMD \${STARROCKS_HOME}/bin/start_cn.sh
 EOF
   docker build -f cn.Dockerfile -t jerrywill/starrocks:$CN_VERSION .
+  rm cn.Dockerfile
 fi
