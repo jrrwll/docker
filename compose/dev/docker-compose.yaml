@@ -1,11 +1,26 @@
 services:
-  postgresql:
+  postgres:
     image: postgres:16
     networks:
       - dev
-    container_name: postgresql
+    container_name: postgres
     ports:
       - "5432:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      # PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: ${PASSWORD}
+
+  pgvector:
+    image: pgvector/pgvector:pg16
+    networks:
+      - dev
+    container_name: pgvector
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./pgvector:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${PASSWORD}
 
@@ -75,7 +90,23 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d/
 
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"   # api port
+      - "9090:9090"   # console
+    volumes:
+      - ./minio/config:/root/.minio
+      - ./minio/data:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9090"
+
 networks:
   dev:
     name: dev
     driver: bridge
+    # docker network create dev -d bridge
+    external: true

@@ -24,5 +24,4 @@ services:
 
 networks:
   dev:
-    name: dev
-    driver: bridge
+    external: true
