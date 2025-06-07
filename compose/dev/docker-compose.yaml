@@ -1,9 +1,14 @@
+x-default-services: &default-services
+  networks:
+    - dev
+  environment:
+    TZ: Asia/Shanghai
+
 services:
   postgres:
     image: postgres:16
-    networks:
-      - dev
     container_name: postgres
+    <<: *default-services
     ports:
       - "5432:5432"
     volumes:
@@ -14,9 +19,8 @@ services:
 
   pgvector:
     image: pgvector/pgvector:pg16
-    networks:
-      - dev
     container_name: pgvector
+    <<: *default-services
     ports:
       - "5433:5432"
     volumes:
@@ -26,9 +30,8 @@ services:
 
   mysql57:
     image: mysql:5.7
-    networks:
-      - dev
     container_name: mysql57
+    <<: *default-services
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3306:3306"
@@ -39,9 +42,8 @@ services:
 
   mysql:
     image: mysql:8.3
-    networks:
-      - dev
     container_name: mysql
+    <<: *default-services
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3307:3306"
@@ -50,12 +52,21 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${PASSWORD}
 
+  redis:
+    image: redis
+    container_name: redis
+    <<: *default-services
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   # https://github.com/bitnami/containers/tree/main/bitnami/kafka#how-to-use-this-image
   kafka37:
     image: bitnami/kafka:3.7
     container_name: kafka37
-    networks:
-      - dev
+    <<: *default-services
     ports:
       - "9092:9092"
     volumes:
@@ -72,8 +83,7 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui
     container_name: kafka-ui
-    networks:
-      - dev
+    <<: *default-services
     ports:
       - "9093:8080"
     environment:
@@ -83,8 +93,7 @@ services:
   nginx:
     image: nginx
     container_name: nginx
-    networks:
-      - dev
+    <<: *default-services
     ports:
       - "80:80"
     volumes:
@@ -93,6 +102,7 @@ services:
   minio:
     image: minio/minio
     container_name: minio
+    <<: *default-services
     ports:
       - "9000:9000"   # api port
       - "9090:9090"   # console
@@ -106,7 +116,5 @@ services:
 
 networks:
   dev:
-    name: dev
-    driver: bridge
     # docker network create dev -d bridge
     external: true
