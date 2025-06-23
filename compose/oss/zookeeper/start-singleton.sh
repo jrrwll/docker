@@ -13,8 +13,3 @@ docker run -itd --name zookeeper \
 
 
 docker exec -it zookeeper ./bin/zkServer.sh status
-
-docker run -it --rm --network dev \
-  zookeeper zkCli.sh -server zookeeper
-
-# ls /
