@@ -74,9 +74,33 @@ docker run -itd --name pypiserver \
 
 ```shell
 htpasswd -bcm .pypiserver-htpasswd tuke tuke
+
 docker run -itd --name pypiserver \
-    -p 8080:8080
-    -v /root/pypi/.pypiserver-htpasswd:${PWD}/.pypiserver-htpasswd
-    -v /root/pypi/packages:${PWD}/packages \
-    pypiserver/pypiserver -P .pypiserver-htpasswd ./packages
+    -p 8080:8080 \
+    -v ${PWD}/.pypiserver-htpasswd:/data/.pypiserver-htpasswd \
+    -v ${PWD}/packages:/data/packages \
+    pypiserver/pypiserver run --host 0.0.0.0 -P .pypiserver-htpasswd ./packages
+```
+
+**pypiserver.dev.dreamcat.org.conf**
+
+```nginx configuration
+server {
+    listen       80;
+    server_name  pypiserver.dev.dreamcat.org;
+
+    location / {
+        proxy_pass http://$LOCAL_IP:8080;
+        
+        # welcome.html need it to render the `{{URL}}` variable
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+    }
+
+    location /health {
+        add_header Content-Type "text/plain;charset=utf-8";
+        return 200 "Your IP Address:$remote_addr";
+    }
+}
 ```
