@@ -13,8 +13,7 @@ services:
       - ./data/meta1:/opt/starrocks/fe/meta
       - ./log/fe1:/opt/starrocks/fe/log
     networks:
-       starrocks:
-         ipv4_address: 172.90.30.3
+       - starrocks
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
       interval: 10s
@@ -37,7 +36,7 @@ services:
       - starrocks
     depends_on:
       - fe1
-    command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper 172.90.30.3:9010"]
+    command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper starrocks-fe1:9010"]
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
       interval: 10s
@@ -60,7 +59,7 @@ services:
       - starrocks
     depends_on:
       - fe1
-    command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper 172.90.30.3:9010"]
+    command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper starrocks-fe1:9010"]
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
       interval: 10s
