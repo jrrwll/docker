@@ -1,7 +1,7 @@
 services:
   fe1:
     image: jerrywill/starrocks:${IMAGE_VERSION}-fe
-    container_name: starrocks-fe-1
+    container_name: starrocks-fe1
     restart: always
     privileged: true
     environment:
@@ -22,7 +22,7 @@ services:
       retries: 3
   fe2:
     image: jerrywill/starrocks:${IMAGE_VERSION}-fe
-    container_name: starrocks-fe-2
+    container_name: starrocks-fe2
     restart: always
     privileged: true
     environment:
@@ -45,7 +45,7 @@ services:
       retries: 3
   fe3:
     image: jerrywill/starrocks:${IMAGE_VERSION}-fe
-    container_name: starrocks-fe-3
+    container_name: starrocks-fe3
     restart: always
     privileged: true
     environment:
@@ -66,9 +66,63 @@ services:
       interval: 10s
       timeout: 20s
       retries: 3
+  be1:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-be
+    container_name: starrocks-be1
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/be.conf:/opt/starrocks/be/conf/be.conf
+      - ./data/storage1:/opt/starrocks/be/storage
+      - ./log/be1:/opt/starrocks/be/log
+    networks:
+      - starrocks
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+  be2:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-be
+    container_name: starrocks-be2
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/be.conf:/opt/starrocks/be/conf/be.conf
+      - ./data/storage2:/opt/starrocks/be/storage
+      - ./log/be2:/opt/starrocks/be/log
+    networks:
+      - starrocks
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+  be3:
+    image: jerrywill/starrocks:${IMAGE_VERSION}-be
+    container_name: starrocks-be3
+    restart: always
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./conf/be.conf:/opt/starrocks/be/conf/be.conf
+      - ./data/storage3:/opt/starrocks/be/storage
+      - ./log/be3:/opt/starrocks/be/log
+    networks:
+      - starrocks
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
   cn1:
     image: jerrywill/starrocks:${IMAGE_VERSION}-cn
-    container_name: starrocks-cn-1
+    container_name: starrocks-cn1
     restart: always
     privileged: true
     environment:
@@ -86,7 +140,7 @@ services:
       retries: 3
   cn2:
     image: jerrywill/starrocks:${IMAGE_VERSION}-cn
-    container_name: starrocks-cn-2
+    container_name: starrocks-cn2
     restart: always
     privileged: true
     environment:
@@ -104,7 +158,7 @@ services:
       retries: 3
   cn3:
     image: jerrywill/starrocks:${IMAGE_VERSION}-cn
-    container_name: starrocks-cn-3
+    container_name: starrocks-cn3
     restart: always
     privileged: true
     environment:
