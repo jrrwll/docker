@@ -1,6 +1,6 @@
 FROM jerrywill/debian:12
 
-MAINTAINER "tuke tukeof@gmail.com"
+LABEL maintainer="tuke tukeof@gmail.com"
 
 # https://www.azul.com/downloads/?version=java-17-lts&os=linux&package=jdk#zulu
 
