@@ -12,7 +12,8 @@ docker run -d --name prometheus \
 
 # -e "GF_LOG_LEVEL=debug"
 docker run -d --name grafana \
-    -p 3000:3000 \
     --user "$(id -u)" \
+    -p 3000:3000 \
+    -e GF_SECURITY_ADMIN_PASSWORD=admin \
     -v ./data:/var/lib/grafana \
     grafana/grafana

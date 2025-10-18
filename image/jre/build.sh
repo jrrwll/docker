@@ -1,26 +1,59 @@
 #!/usr/bin/env bash
 
-while read i; do
+function build_arch() {
+    i=$(echo $1 | rev | cut -d. -f3- | rev)
     if [[ ! -f $i.tar.gz ]]; then
         echo "skip $i.tar.gz since no exist"
-        continue
+        return
+    fi
+
+    if [[ $(echo $i | cut -d'_' -f2) = 'x64' ]]; then
+        arch=amd64
+    else
+        arch=arm64
     fi
 
     JRE_NAME=$(echo $i | cut -d'-' -f3)
-    VERSION=$(echo $JRE_NAME | cut -d'e' -f2)
-    MAJOR_VERSION=$(echo $VERSION | cut -d'.' -f1)
-    echo "building jre:$MAJOR_VERSION from $JRE_NAME"
+    VERSION=$(echo $JRE_NAME | cut -d'e' -f2 | cut -d'.' -f1)
+    if [[ $JRE_NAME != jre* ]]; then
+        return
+    fi
+    echo "building jre:$VERSION from $JRE_NAME"
     tar xfvz $i.tar.gz
     mv $i $JRE_NAME
     tar cfvz $JRE_NAME.tar.gz $JRE_NAME/
 
-    docker build -f $MAJOR_VERSION.Dockerfile -t jerrywill/jre:$MAJOR_VERSION .
-    docker tag jerrywill/jre:$MAJOR_VERSION jerrywill/jre:$VERSION
+    docker build --platform linux/$arch -f $VERSION.Dockerfile -t jerrywill/jre:$arch-$VERSION .
+    docker push jerrywill/jre:$arch-$VERSION
+    rm -rf "$JRE_NAME" "$JRE_NAME.tar.gz"
+}
 
-    echo "\nMaybe you want to push your mirror image next:"
-    echo "docker push jerrywill/jre:$MAJOR_VERSION"
-    echo "docker push jerrywill/jre:$VERSION"
-done <<EOF
-zulu17.50.19-ca-jre17.0.11-linux_x64
-zulu11.82.19-ca-jre11.0.28-linux_x64
-EOF
+function build_arch_manifest() {
+    VERSION=$1
+
+    docker manifest create jerrywill/jre:$VERSION \
+        jerrywill/jre:arm64-$VERSION \
+        jerrywill/jre:amd64-$VERSION
+
+    docker manifest annotate jerrywill/jre:$VERSION \
+        jerrywill/jre:arm64-$VERSION --arch arm64
+    docker manifest annotate jerrywill/jre:$VERSION \
+        jerrywill/jre:amd64-$VERSION --arch amd64
+
+    docker manifest push jerrywill/jre:$VERSION
+}
+
+# don't call it via source the script
+if [ $# != 0 ]; then
+    build_arch zulu11.82.19-ca-jre11.0.28-linux_x64.tar.gz
+    build_arch zulu11.82.19-ca-jre11.0.28-linux_aarch64.tar.gz
+    build_arch_manifest 11
+
+    build_arch zulu17.60.17-ca-jre17.0.16-linux_x64.tar.gz
+    build_arch zulu17.60.17-ca-jre17.0.16-linux_aarch64.tar.gz
+    build_arch_manifest 17
+
+    build_arch zulu21.44.17-ca-jre21.0.8-linux_x64.tar.gz
+    build_arch zulu21.44.17-ca-jre21.0.8-linux_aarch64.tar.gz
+    build_arch_manifest 21
+fi
