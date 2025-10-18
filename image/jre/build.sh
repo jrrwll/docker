@@ -23,8 +23,8 @@ function build_arch() {
     mv $i $JRE_NAME
     tar cfvz $JRE_NAME.tar.gz $JRE_NAME/
 
-    docker build --platform linux/$arch -f $VERSION.Dockerfile -t jerrywill/jre:$arch-$VERSION .
-    docker push jerrywill/jre:$arch-$VERSION
+    docker build --platform linux/$arch -f $VERSION.Dockerfile -t jerrywill/jre:$VERSION-$arch .
+    docker push jerrywill/jre:$VERSION-$arch
     rm -rf "$JRE_NAME" "$JRE_NAME.tar.gz"
 }
 
@@ -32,13 +32,13 @@ function build_arch_manifest() {
     VERSION=$1
 
     docker manifest create jerrywill/jre:$VERSION \
-        jerrywill/jre:arm64-$VERSION \
-        jerrywill/jre:amd64-$VERSION
+        jerrywill/jre:$VERSION-arm64 \
+        jerrywill/jre:$VERSION-amd64
 
     docker manifest annotate jerrywill/jre:$VERSION \
-        jerrywill/jre:arm64-$VERSION --arch arm64
+        jerrywill/jre:$VERSION-arm64 --arch arm64
     docker manifest annotate jerrywill/jre:$VERSION \
-        jerrywill/jre:amd64-$VERSION --arch amd64
+        jerrywill/jre:$VERSION-amd64 --arch amd64
 
     docker manifest push jerrywill/jre:$VERSION
 }
