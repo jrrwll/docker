@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 function build_arch() {
+    set -x
     i=$(echo $1 | rev | cut -d. -f3- | rev)
     if [[ ! -f $i.tar.gz ]]; then
         echo "skip $i.tar.gz since no exist"
@@ -31,6 +32,7 @@ function build_arch() {
 function build_arch_manifest() {
     VERSION=$1
 
+    set -x
     docker manifest create jerrywill/jre:$VERSION \
         jerrywill/jre:$VERSION-arm64 \
         jerrywill/jre:$VERSION-amd64
