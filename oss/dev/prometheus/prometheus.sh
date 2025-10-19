@@ -3,6 +3,7 @@
 
 # -v ./config:/etc/prometheus
 docker run -d --name prometheus \
+    --user "$(id -u)" \
     -p 9090:9090 \
     -v ./config/prometheus.yml:/etc/prometheus/prometheus.yml \
     -v ./data:/prometheus \
