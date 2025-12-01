@@ -1,0 +1,10 @@
+# https://docs.pingcap.com/zh/tidb/stable/tikv-configuration-file/
+[raftdb]
+max-open-files = 256
+
+[rocksdb]
+max-open-files = 256
+
+[storage]
+reserve-raft-space = 0
+reserve-space = 0

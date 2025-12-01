@@ -1,0 +1,13 @@
+[storage.main]
+dir = ["/data/tiflash_data"]
+capacity = "10GB"
+
+[flash]
+[flash.proxy]
+config = "/opt/tikv.toml"
+
+[logger]
+level = "debug"
+size = "100M"
+# remaining file count
+count = 10

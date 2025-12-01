@@ -1,52 +1,110 @@
 services:
   pd:
-    image: pingcap/pd
-    ports:
-      - "2379"
-    volumes:
-      - ./config/pd.toml:/pd.toml:ro
-      - ./data:/data
-      - ./logs:/logs
+    image: pingcap/pd/pd:v8.5.4
+    # https://docs.pingcap.com/zh/tidb/stable/command-line-flags-for-pd-configuration/
     command:
       - --name=pd
-      - --client-urls=http://0.0.0.0:2379
-      - --peer-urls=http://0.0.0.0:2380
-      - --advertise-client-urls=http://pd:2379
-      - --advertise-peer-urls=http://pd:2380
-      - --initial-cluster=pd=http://pd:2380
+      - --config=/opt/pd.toml
       - --data-dir=/data/pd
-      - --config=/pd.toml
-      - --log-file=/logs/pd.log
+      - --peer-urls=http://0.0.0.0:2380
+      - --advertise-peer-urls=http://pd:2380
+      - --client-urls=http://0.0.0.0:2379
+      - --advertise-client-urls=http://pd:2379
+      - --log-file=/data/log/pd.log
+      - --initial-cluster=pd=http://pd:2380
+    volumes:
+      - ./data/pd:/data
+      - ./config/pd.toml:/opt/pd.toml
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "2379:2379"
+    networks:
+      - tidb
 
   tikv:
-    image: pingcap/tikv
-    volumes:
-      - ./config/tikv.toml:/tikv.toml:ro
-      - ./data:/data
-      - ./logs:/logs
+    image: pingcap/tikv:v8.5.4
+    # https://docs.pingcap.com/zh/tidb/stable/command-line-flags-for-tikv-configuration/
     command:
       - --addr=0.0.0.0:20160
       - --advertise-addr=tikv:20160
-      - --data-dir=/data/tikv
+      - --status-addr=0.0.0.0:20180
+      - --advertise-status-addr=tikv:20180
       - --pd=pd:2379
-      - --config=/tikv.toml
-      - --log-file=/logs/tikv.log
+      - --config=/opt/tikv.toml
+      - --data-dir=/data/tikv
+      - --log-file=/data/log/tikv.log
+    volumes:
+      - ./config/tikv.toml:/opt/tikv.toml
+      - ./data/tikv:/data
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
-      - "pd"
+      - pd
+    networks:
+      - tidb
 
   tidb:
-    image: pingcap/tidb
+    image: pingcap/tidb:v8.5.4
+    # https://docs.pingcap.com/zh/tidb/stable/command-line-flags-for-tidb-configuration/
+    command:
+      - -P
+      - "4000"
+      - --store=tikv
+      - --host=0.0.0.0
+      - --status=10080
+      - --path=pd:2379
+      - --log-file=/data/log/tidb.log
+      - --config=/opt/tidb.toml
     ports:
       - "4000:4000"
       - "10080:10080"
     volumes:
-      - ./config/tidb.toml:/tidb.toml:ro
-      - ./logs:/logs
-    command:
-      - --store=tikv
-      - --path=pd:2379
-      - --config=/tidb.toml
-      - --log-file=/logs/tidb.log
-      - --advertise-address=tidb
+      - ./config/tidb.toml:/opt/tidb.toml
+      - ./data/tidb:/data
+      - /etc/localtime:/etc/localtime:ro
     depends_on:
-      - "tikv"
+      - pd
+      - tikv
+    networks:
+      - tidb
+
+  tiflash:
+    image: pingcap/tiflash:v8.5.4
+    # https://docs.pingcap.com/zh/tidb/stable/tiflash-configuration/
+    command:
+      - server
+      - --config-file=/opt/tiflash.toml
+      - --
+#      - --path=/data/tiflash
+      - --listen_host=0.0.0.0
+      - --logger.log=/data/log/tiflash.log
+      - --logger.errorlog=/data/log/tiflash_error.log
+      - --status.metrics_port=8234
+      - --raft.pd_addr=pd:2379
+      - --flash.service_addr=0.0.0.0:3930
+      - --flash.proxy.addr=0.0.0.0:20170
+      - --flash.proxy.advertise-addr=tiflash:20170
+      - --flash.proxy.status-addr=0.0.0.0:20292
+      - --flash.proxy.advertise-status-addr=tiflash:20292
+      - --flash.proxy.engine-addr=tiflash:3930
+      - --flash.proxy.data-dir=/data/proxy_data
+      - --flash.proxy.log-file=/data/log/tiflash_tikv.log
+    volumes:
+      - ./config/tiflash.toml:/opt/tiflash.toml
+      - ./tikv.toml:/opt/tikv.toml
+      - ./data/tiflash:/data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+      - "20292:20292"
+    depends_on:
+      - pd
+      - tikv
+      - tidb
+    networks:
+      - tidb
+
+networks:
+  # docker network create tidb --driver=bridge
+  tidb:
+    external: true

@@ -1,0 +1,9 @@
+# https://docs.pingcap.com/zh/tidb/stable/pd-configuration-file/
+[replication]
+# leader + follower, default is 3
+max-replicas = 1
+
+[schedule]
+# default is 0.8
+low-space-ratio = 1.0
+patrol-region-interval = "100ms"

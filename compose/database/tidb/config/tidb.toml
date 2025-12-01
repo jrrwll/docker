@@ -1,0 +1,3 @@
+# https://docs.pingcap.com/zh/tidb/stable/tidb-configuration-file/
+[security]
+auto-tls = true
