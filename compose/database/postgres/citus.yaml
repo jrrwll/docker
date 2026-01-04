@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  master:
+    image: citusdata/citus:13
+    container_name: citus_master
+    ports:
+      - "5432:5432"
+    environment: &AUTH
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "${PASSWORD:-citus}"
+      PGUSER: "postgres"
+      PGPASSWORD: "${PASSWORD:-citus}"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  worker:
+    image: citusdata/citus:13
+    container_name: citus_worker
+    depends_on:
+      - citus_master
+    environment: *AUTH
+    command: "/wait-for-manager.sh"
+
+  manager:
+    image: citusdata/membership-manager
+    container_name: citus_manager
+    depends_on:
+      - citus_master
+    environment: *AUTH
