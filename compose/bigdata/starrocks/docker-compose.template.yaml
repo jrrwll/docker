@@ -13,7 +13,7 @@ services:
       - ./data/meta1:/opt/starrocks/fe/meta
       - ./log/fe1:/opt/starrocks/fe/log
     networks:
-       - starrocks
+       - dev
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
       interval: 10s
@@ -33,7 +33,7 @@ services:
       - ./data/meta2:/opt/starrocks/fe/meta
       - ./log/fe2:/opt/starrocks/fe/log
     networks:
-      - starrocks
+      - dev
     depends_on:
       - fe1
     command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper starrocks-fe1:9010"]
@@ -56,7 +56,7 @@ services:
       - ./data/meta3:/opt/starrocks/fe/meta
       - ./log/fe3:/opt/starrocks/fe/log
     networks:
-      - starrocks
+      - dev
     depends_on:
       - fe1
     command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper starrocks-fe1:9010"]
@@ -77,7 +77,7 @@ services:
       - ./data/storage1:/opt/starrocks/be/storage
       - ./log/be1:/opt/starrocks/be/log
     networks:
-      - starrocks
+      - dev
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -95,7 +95,7 @@ services:
       - ./data/storage2:/opt/starrocks/be/storage
       - ./log/be2:/opt/starrocks/be/log
     networks:
-      - starrocks
+      - dev
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -113,7 +113,7 @@ services:
       - ./data/storage3:/opt/starrocks/be/storage
       - ./log/be3:/opt/starrocks/be/log
     networks:
-      - starrocks
+      - dev
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -131,7 +131,7 @@ services:
       - ./data/storage1:/opt/starrocks/be/storage
       - ./log/cn1:/opt/starrocks/be/log
     networks:
-      - starrocks
+      - dev
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -149,7 +149,7 @@ services:
       - ./data/storage2:/opt/starrocks/be/storage
       - ./log/cn2:/opt/starrocks/be/log
     networks:
-      - starrocks
+      - dev
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -167,7 +167,7 @@ services:
       - ./data/storage3:/opt/starrocks/be/storage
       - ./log/cn3:/opt/starrocks/be/log
     networks:
-      - starrocks
+      - dev
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -175,8 +175,6 @@ services:
       retries: 3
 
 networks:
-  starrocks:
+  dev:
     external: true
-#    ipam:
-#      config:
-#        - subnet: 172.90.30.0/24
+

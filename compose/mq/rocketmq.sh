@@ -5,6 +5,7 @@ brokerName=broker1
 brokerId=1
 brokerRole=ASYNC_MASTER
 flushDiskType=ASYNC_FLUSH
+brokerIP1=192.168.0.0
 EOF
 
 mkdir -p data/broker1
@@ -18,8 +19,8 @@ docker run -d --name rocketmq-broker \
     --link rocketmq-namesrv \
     -e "NAMESRV_ADDR=rocketmq-namesrv:9876" \
     -p 10911:10911 -p 10909:10909 \
-    -v ./broker.conf:/home/rocketmq/broker.conf \
-    -v ./data/broker1:/home/rocketmq/store \
+    -v $PWD/broker.conf:/home/rocketmq/broker.conf \
+    -v $PWD/data/broker1:/home/rocketmq/store \
     apache/rocketmq:5.3.2 \
     sh mqbroker -c /home/rocketmq/broker.conf
 

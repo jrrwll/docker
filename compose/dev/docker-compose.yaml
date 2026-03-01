@@ -69,7 +69,7 @@ services:
   # https://github.com/bitnami/containers/tree/main/bitnami/kafka#how-to-use-this-image
   kafka:
     image: bitnami/kafka:3.7
-    container_name: kafka37
+    container_name: kafka
     <<: *default-services
     ports:
       - "9092:9092"
