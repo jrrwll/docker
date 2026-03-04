@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
 
 IMAGE_VERSION=3.2
+SUBNET_PREFIX=172.90.30
 
 cp docker-compose.template.yaml docker-compose.yaml
 sed -i "s/\${IMAGE_VERSION}/$IMAGE_VERSION/g" docker-compose.yaml
+sed -i "s/\${SUBNET_PREFIX}/$SUBNET_PREFIX/g" docker-compose.yaml
 
 # config files and workdir
+cp conf/fe.template.conf conf/fe.conf
+sed -i "s/\${SUBNET_PREFIX}/$SUBNET_PREFIX/g" conf/fe.conf
+cp conf/cn.template.conf conf/cn.conf
+sed -i "s/\${SUBNET_PREFIX}/$SUBNET_PREFIX/g" conf/cn.conf
+
 mkdir -p data/meta1 data/meta2 data/meta3 data/storage1 data/storage2 data/storage3
-mkdir -p log log/fe1 log/fe2 log/fe3 log/cn1 log/cn2 log/cn3
+mkdir -p log/fe1 log/fe2 log/fe3 log/cn1 log/cn2 log/cn3
 
 # delete be in docker-compose.yaml
 awk '
@@ -18,10 +25,10 @@ awk '
 mv docker-compose.yaml.tmp docker-compose.yaml
 
 # docker
-if [ "$(docker network ls | grep -o dev)" ]; then
-    echo -e "\033[32mnetwork dev already exists, skip to create it...\033[0m"
+if [ "$(docker network ls | grep -o starrocks)" ]; then
+    echo -e "\033[32mnetwork starrocks already exists, skip to create it...\033[0m"
 else
-    docker network create --driver bridge dev
+    docker network create --driver bridge --subnet "$SUBNET_PREFIX.0/24" starrocks
 fi
 
 docker-compose up -d
@@ -34,14 +41,15 @@ while [ "$(docker inspect --format='{{.State.Health.Status}}' starrocks-fe1)" !=
     sleep 1
     count=$((count + 1))
 done
-echo -n '\n'
+echo
+
 if [ $count -ge $timeout ]; then
-    echo -e "\ntimeout: FE node not ready within 15 seconds."
+    echo -e "timeout: FE node not ready within 15 seconds.\n"
 fi
 
 # add fe follower/observer ip:edit_log_port
 for i in starrocks-fe2 starrocks-fe3; do
-    ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $i)
+    ip=$(docker inspect -f '{{.NetworkSettings.Networks.starrocks.IPAddress}}' $i)
     mysql -h 127.0.0.1 -P9030 -uroot -e "
     alter system add follower '$ip:9010';
     "
@@ -49,7 +57,7 @@ done
 
 # add cn ip:heartbeat_service_port
 for i in starrocks-cn1 starrocks-cn2 starrocks-cn3; do
-    ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $i)
+    ip=$(docker inspect -f '{{.NetworkSettings.Networks.starrocks.IPAddress}}' $i)
     mysql -h 127.0.0.1 -P9030 -uroot -e "
     alter system add compute node '$ip:9050';
     "
