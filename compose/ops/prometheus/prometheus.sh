@@ -6,7 +6,7 @@ docker run -d --name prometheus \
     --network dev \
     --user "$(id -u)" \
     -p 9090:9090 \
-    -v ./config/prometheus.yml:/etc/prometheus/prometheus.yml \
+    -v ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml \
     -v ./data:/prometheus \
     prom/prometheus
 

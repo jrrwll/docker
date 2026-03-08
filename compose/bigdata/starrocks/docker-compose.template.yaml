@@ -15,6 +15,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.11
+      dev:
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :9030 || exit 1"]
       interval: 10s
@@ -36,6 +37,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.12
+      dev:
     depends_on:
       - fe1
     command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper ${SUBNET_PREFIX}.11:9010"]
@@ -60,6 +62,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.13
+      dev:
     depends_on:
       - fe1
     command: ["sh","-c","/opt/starrocks/fe/bin/start_fe.sh --helper ${SUBNET_PREFIX}.11:9010"]
@@ -82,6 +85,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.14
+      dev:
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -101,6 +105,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.15
+      dev:
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -120,6 +125,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.16
+      dev:
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -139,6 +145,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.14
+      dev:
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -158,6 +165,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.15
+      dev:
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -177,6 +185,7 @@ services:
     networks:
       starrocks:
         ipv4_address: ${SUBNET_PREFIX}.16
+      dev:
     healthcheck:
       test: ["CMD-SHELL", "netstat -tnlp|grep :8040 || exit 1"]
       interval: 10s
@@ -189,4 +198,6 @@ networks:
     # driver: bridge
     # ipam:
     #   config:
-    #     - subnet: $SUBNET_PREFIX.0/24
+    #     - subnet: ${SUBNET_PREFIX}.0/24
+  dev:
+    external: true

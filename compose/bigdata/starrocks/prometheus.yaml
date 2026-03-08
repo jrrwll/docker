@@ -1,0 +1,16 @@
+# https://grafana.com/grafana/dashboards/22909-starrocks-overview/
+
+scrape_configs:
+
+  - job_name: 'StarRocks'
+    static_configs:
+      - targets: ['starrocks-fe1:8030', 'starrocks-fe2:8030', 'starrocks-fe3:8030']
+        labels:
+          group: fe
+      - targets: [ 'starrocks-be1:8040', 'starrocks-be2:8040', 'starrocks-be3:8040' ]
+        labels:
+          group: be
+    basic_auth:
+      username: 'root'
+      password: ''
+    metrics_path: '/metrics'
